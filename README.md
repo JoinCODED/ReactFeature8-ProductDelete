@@ -1,68 +1,142 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Cookie Delete
 
-## Available Scripts
+## Discussion
 
-In the project directory, you can run:
+**Topics to discuss:**
 
-### `yarn start`
+- Passing methods as props
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Step 1: Delete Button
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+To delete a cookie, each one of our cookies will need a delete button.
 
-### `yarn test`
+1. In `CookieItem`, add the delete button under the price. My website's design is minimalistic, so instead of a button I'll add a `p` tag and give it a `className` called .
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```jsx
+<p className="cookie-price">{cookie.price} KD</p>
+<p className="cookie-delete">Delete</p>
+```
 
-### `yarn build`
+2. To distinguish the delete `p` tag from the others, we'll give it the color red.
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. In `App.js`, we will add our shade of red to both themes.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+```javascript
+const lightTheme = {
+  mainColor: "#242424", // main font color
+  backgroundColor: "#fefafb", // main background color
+  pink: "#ff85a2",
+  red: "#ff3232"
+};
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+const darkTheme = {
+  mainColor: "#fefafb", // main font color
+  backgroundColor: "#242424", // main background color
+  pink: "#ff85a2",
+  red: "#ff3232"
+};
+```
 
-### `yarn eject`
+4. In `styles`, add the class `cookie-delete` under the `p` tag of `CookieWrapper` and give the property `color` the color from our theme.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```javascript
+p {
+    text-align: center;
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+    &.cookie-price {
+      color: ${props => props.theme.pink};
+    }
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+    &.cookie-delete {
+      color: ${props => props.theme.red};
+    }
+  }
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+5. Check the browser, our `delete` is showing! The question is, can we add an `onClick` event on a `p` tag? Yes you can. You can add an `onClick` event on any tag. So let's add an `onClick` event that gives an alert with the cookie's ID.
 
-## Learn More
+```jsx
+<p
+  className="cookie-delete"
+  onClick={() => alert(`Delete cookie #${cookie.id}`)}
+>
+  Delete
+</p>
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Step 2: Delete Method
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Okay, what should happen when we click on the button? The cookie must be deleted from `cookies` in `CookieList`. You can't delete it from `props`, because `props` is read-only. So we will create a delete method in `CookieList` and pass it as a prop to `CookieItem`.
 
-### Code Splitting
+1. In `CookieList`, create a function that takes the ID of the cookie we want to delete:
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+```javascript
+const CookieList = () => {
+    const deleteCookie = cookieId => {};
+```
 
-### Analyzing the Bundle Size
+2. We will use `filter` to remove the cookie with the passed ID from our `cookies` array. The `+` before `cookieId` converts it from a string to a number.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+```javascript
+const deleteCookie = cookieId => {
+  cookies = cookies.filter(cookie => cookie.id !== +cookieId);
+};
+```
 
-### Making a Progressive Web App
+3. Now we will pass this method as a prop to `CookieItem`:
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+```javascript
+const cookieList = cookies.map(cookie => (
+  <CookieItem cookie={cookie} key={cookie.id} deleteCookie={deleteCookie} />
+));
+```
 
-### Advanced Configuration
+4. In `CookieItem`, we will pass `props.deleteCookie` to `onClick`:
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+```jsx
+<p className="cookie-delete" onClick={() => props.deleteCookie(cookie.id)}>
+  Delete
+</p>
+```
 
-### Deployment
+5. Nothing happened. Let's console log `cookies` to see what's happening:
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+```javascript
+const deleteCookie = cookieId => {
+  cookies = cookies.filter(cookie => cookie.id !== +cookieId);
+  console.log("CookieList -> cookies", cookies);
+};
+```
 
-### `yarn build` fails to minify
+6. `cookies` is changing, but we can't see the change. We agreed that if we want to see our elements change dynamically we need to use state. So let's import `useState` to create our state.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+```javascript
+import React, { useState } from "react";
+```
+
+7. Our state will represent the cookies on the screen so we will call it `cookies`, but we already have a variable called `cookies` which is our data. We'll call our state `_cookies` , and we'll set the initial value to `cookies` which has all our cookies.
+
+```javascript
+const [_cookies, setCookies] = useState(cookies);
+```
+
+8. Let's fix our `deleteCookies` method to use our state and state method:
+
+```javascript
+const deleteCookie = cookieId => {
+  const updatedCookies = _cookies.filter(cookie => cookie.id !== +cookieId);
+  setCookies(updatedCookies);
+};
+```
+
+9. Let's try deleting now. Nothing happened. Let's check the Dev tools. `_cookies` is changing when we're deleting but it's not rendering. Why is that?
+
+10. Because we're still mapping over `cookies`. Let's change it so that maps over `_cookies`.
+
+```javascript
+const cookieList = _cookies.map(cookie => (
+  <CookieItem cookie={cookie} key={cookie.id} deleteCookie={deleteCookie} />
+));
+```
+
+11. And it's working!
