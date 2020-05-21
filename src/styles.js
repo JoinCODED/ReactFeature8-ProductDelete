@@ -14,6 +14,10 @@ const CookieWrapper = styled.div`
     &.cookie-price {
       color: ${props => props.theme.pink};
     }
+
+    &.cookie-delete {
+      color: ${props => props.theme.red};
+    }
   }
 `;
 

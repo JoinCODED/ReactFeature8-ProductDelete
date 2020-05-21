@@ -16,13 +16,15 @@ import {
 const lightTheme = {
   mainColor: "#242424", // main font color
   backgroundColor: "#fefafb", // main background color
-  pink: "#ff85a2"
+  pink: "#ff85a2",
+  red: "#ff3232"
 };
 
 const darkTheme = {
   mainColor: "#fefafb", // main font color
   backgroundColor: "#242424", // main background color
-  pink: "#ff85a2"
+  pink: "#ff85a2",
+  red: "#ff3232"
 };
 
 function App() {
