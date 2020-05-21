@@ -1,25 +1,53 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { ThemeProvider } from "styled-components";
+
+// Components
+import CookieList from "./components/CookieList";
+
+// Styling
+import {
+  Description,
+  GlobalStyle,
+  ShopImage,
+  ThemeButton,
+  Title
+} from "./styles";
+
+const lightTheme = {
+  mainColor: "#242424", // main font color
+  backgroundColor: "#fefafb", // main background color
+  pink: "#ff85a2"
+};
+
+const darkTheme = {
+  mainColor: "#fefafb", // main font color
+  backgroundColor: "#242424", // main background color
+  pink: "#ff85a2"
+};
 
 function App() {
+  const [theme, setTheme] = useState("light");
+
+  const toggleTheme = () => {
+    if (theme === "light") setTheme("dark");
+    else setTheme("light");
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
+      <GlobalStyle />
+      <ThemeButton onClick={toggleTheme}>
+        {theme === "light" ? "Dark" : "Light"} Mode
+      </ThemeButton>
+      <>
+        <Title>Cookies and Beyond</Title>
+        <Description>Where cookie maniacs gather</Description>
+        <ShopImage
+          alt="cookie shop"
+          src="https://i.pinimg.com/originals/8f/cf/71/8fcf719bce331fe39d7e31ebf07349f3.jpg"
+        />
+      </>
+      <CookieList />
+    </ThemeProvider>
   );
 }
 
