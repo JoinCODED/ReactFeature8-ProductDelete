@@ -6,6 +6,16 @@
 
 - Passing methods as props
 
+## Step 0: Previous Challenge
+
+1. The word `Dark` in our button is not changing, it's weird to have it always saying `Dark Mode`. Let's give it a condition! If `theme` is equal to `light`, the return value of the conditional operator is `Dark`, else it will be `Light`.
+
+```jsx
+<ThemeButton onClick={toggleTheme}>
+  {theme === "light" ? "Dark" : "Light"} Mode
+</ThemeButton>
+```
+
 ## Step 1: Delete Button
 
 To delete a cookie, each one of our cookies will need a delete button.

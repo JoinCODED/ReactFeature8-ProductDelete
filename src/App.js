@@ -37,9 +37,7 @@ function App() {
   return (
     <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
       <GlobalStyle />
-      <ThemeButton onClick={toggleTheme}>
-        {theme === "light" ? "Dark" : "Light"} Mode
-      </ThemeButton>
+      <ThemeButton onClick={toggleTheme}>Dark Mode</ThemeButton>
       <>
         <Title>Cookies and Beyond</Title>
         <Description>Where cookie maniacs gather</Description>
