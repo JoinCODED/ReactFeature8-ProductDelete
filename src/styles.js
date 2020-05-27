@@ -12,11 +12,7 @@ const CookieWrapper = styled.div`
     text-align: center;
 
     &.cookie-price {
-      color: ${props => props.theme.pink};
-    }
-
-    &.cookie-delete {
-      color: ${props => props.theme.red};
+      color: ${(props) => props.theme.pink};
     }
   }
 `;
@@ -27,8 +23,8 @@ const Description = styled.h4`
 
 const GlobalStyle = createGlobalStyle`
   body {
-    color: ${props => props.theme.mainColor};
-    background-color: ${props => props.theme.backgroundColor}
+    color: ${(props) => props.theme.mainColor};
+    background-color: ${(props) => props.theme.backgroundColor}
   }
 `;
 
@@ -43,8 +39,8 @@ const ThemeButton = styled.button`
   margin: 1.25em;
   padding: 0.25em 1em;
   border-radius: 3px;
-  background-color: ${props => props.theme.mainColor};
-  color: ${props => props.theme.backgroundColor};
+  background-color: ${(props) => props.theme.mainColor};
+  color: ${(props) => props.theme.backgroundColor};
 `;
 
 const Title = styled.h1`
@@ -65,5 +61,5 @@ export {
   ListWrapper,
   Title,
   ShopImage,
-  ThemeButton
+  ThemeButton,
 };

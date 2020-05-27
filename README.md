@@ -32,18 +32,17 @@ To delete a cookie, each one of our cookies will need a delete button.
 3. In `App.js`, we will add our shade of red to both themes.
 
 ```javascript
-const lightTheme = {
-  mainColor: "#242424", // main font color
-  backgroundColor: "#fefafb", // main background color
-  pink: "#ff85a2",
-  red: "#ff3232"
-};
-
-const darkTheme = {
-  mainColor: "#fefafb", // main font color
-  backgroundColor: "#242424", // main background color
-  pink: "#ff85a2",
-  red: "#ff3232"
+const theme = {
+  light: {
+    mainColor: "#242424", // main font color
+    backgroundColor: "#fefafb", // main background color
+    pink: "#ff85a2",
+  },
+  dark: {
+    mainColor: "#fefafb", // main font color
+    backgroundColor: "#242424", // main background color
+    pink: "#ff85a2",
+  },
 };
 ```
 
