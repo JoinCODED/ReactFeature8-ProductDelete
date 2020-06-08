@@ -20,16 +20,17 @@
 
 To delete a cookie, each one of our cookies will need a delete button.
 
-1. In `CookieItem`, add the delete button under the price. My website's design is minimalistic, so instead of a button I'll add a `p` tag and give it a `className` called .
+1. In `CookieItem`, add the delete button under the price. We'll create a styled component for it.
 
-```jsx
-<p className="cookie-price">{cookie.price} KD</p>
-<p className="cookie-delete">Delete</p>
+2. In `styles`, create a styled component called `DeleteButtonStyled`. Instead of a button I'll use a `p` tag, our tag's color will be red.
+
+```javascript
+export const DeleteButtonStyled = styled.p`
+  color: ${(props) => props.theme.red};
+`;
 ```
 
-2. To distinguish the delete `p` tag from the others, we'll give it the color red.
-
-3. In `App.js`, we will add our shade of red to both themes.
+3. But we don't have a `red` color in our theme! In `App.js`, we will add our shade of red to both themes.
 
 ```javascript
 const theme = {
@@ -37,29 +38,22 @@ const theme = {
     mainColor: "#242424", // main font color
     backgroundColor: "#fefafb", // main background color
     pink: "#ff85a2",
+    red: "#ff3232",
   },
   dark: {
     mainColor: "#fefafb", // main font color
     backgroundColor: "#242424", // main background color
     pink: "#ff85a2",
+    red: "#ff3232",
   },
 };
 ```
 
-4. In `styles`, add the class `cookie-delete` under the `p` tag of `CookieWrapper` and give the property `color` the color from our theme.
+4. Import `DeleteButtonStyled` in `CookieItem` and render it under the cookie's price
 
-```javascript
-p {
-    text-align: center;
-
-    &.cookie-price {
-      color: ${props => props.theme.pink};
-    }
-
-    &.cookie-delete {
-      color: ${props => props.theme.red};
-    }
-  }
+```jsx
+<p className="cookie-price">{cookie.price} KD</p>
+<DeleteButtonStyled>Delete</DeleteButtonStyled>
 ```
 
 5. Check the browser, our `delete` is showing! The question is, can we add an `onClick` event on a `p` tag? Yes you can. You can add an `onClick` event on any tag.
@@ -75,9 +69,7 @@ const handleDelete = () => {
 6. So let's add an `onClick` event that calls `handleDelete`
 
 ```jsx
-<p className="cookie-delete" onClick={handleDelete}>
-  Delete
-</p>
+<DeleteButtonStyled onClick={handleDelete}>Delete</DeleteButtonStyled>
 ```
 
 ## Step 2: Delete Method
