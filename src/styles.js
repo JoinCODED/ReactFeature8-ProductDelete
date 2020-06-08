@@ -1,6 +1,6 @@
 import styled, { createGlobalStyle } from "styled-components";
 
-const CookieWrapper = styled.div`
+export const CookieWrapper = styled.div`
   margin: 20px;
 
   img {
@@ -17,24 +17,24 @@ const CookieWrapper = styled.div`
   }
 `;
 
-const Description = styled.h4`
+export const Description = styled.h4`
   text-align: center;
 `;
 
-const GlobalStyle = createGlobalStyle`
+export const GlobalStyle = createGlobalStyle`
   body {
     color: ${(props) => props.theme.mainColor};
     background-color: ${(props) => props.theme.backgroundColor}
   }
 `;
 
-const ListWrapper = styled.div`
+export const ListWrapper = styled.div`
   align-items: center;
   justify-content: center;
   display: flex;
 `;
 
-const ThemeButton = styled.button`
+export const ThemeButton = styled.button`
   font-size: 1em;
   margin: 1.25em;
   padding: 0.25em 1em;
@@ -43,23 +43,13 @@ const ThemeButton = styled.button`
   color: ${(props) => props.theme.backgroundColor};
 `;
 
-const Title = styled.h1`
+export const Title = styled.h1`
   text-align: center;
 `;
 
-const ShopImage = styled.img`
+export const ShopImage = styled.img`
   display: block;
   margin-left: auto;
   margin-right: auto;
   width: 50%;
 `;
-
-export {
-  CookieWrapper,
-  Description,
-  GlobalStyle,
-  ListWrapper,
-  Title,
-  ShopImage,
-  ThemeButton,
-};
