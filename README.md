@@ -62,13 +62,20 @@ p {
   }
 ```
 
-5. Check the browser, our `delete` is showing! The question is, can we add an `onClick` event on a `p` tag? Yes you can. You can add an `onClick` event on any tag. So let's add an `onClick` event that gives an alert with the cookie's ID.
+5. Check the browser, our `delete` is showing! The question is, can we add an `onClick` event on a `p` tag? Yes you can. You can add an `onClick` event on any tag.
+
+6. Let's create a method that will handle the deleting in `CookieItem`, and for now let's give it an alert with the cookie's ID:
+
+```javascript
+const handleDelete = () => {
+  alert(`Delete cookie #${cookie.id}`);
+};
+```
+
+6. So let's add an `onClick` event that calls `handleDelete`
 
 ```jsx
-<p
-  className="cookie-delete"
-  onClick={() => alert(`Delete cookie #${cookie.id}`)}
->
+<p className="cookie-delete" onClick={handleDelete}>
   Delete
 </p>
 ```
@@ -87,32 +94,32 @@ const CookieList = () => {
 2. We will use `filter` to remove the cookie with the passed ID from our `cookies` array. The `+` before `cookieId` converts it from a string to a number.
 
 ```javascript
-const deleteCookie = cookieId => {
-  cookies = cookies.filter(cookie => cookie.id !== +cookieId);
+const deleteCookie = (cookieId) => {
+  cookies = cookies.filter((cookie) => cookie.id !== +cookieId);
 };
 ```
 
 3. Now we will pass this method as a prop to `CookieItem`:
 
 ```javascript
-const cookieList = cookies.map(cookie => (
+const cookieList = cookies.map((cookie) => (
   <CookieItem cookie={cookie} key={cookie.id} deleteCookie={deleteCookie} />
 ));
 ```
 
-4. In `CookieItem`, we will pass `props.deleteCookie` to `onClick`:
+4. In `CookieItem`, we will pass `props.deleteCookie` to `handleDelete`:
 
-```jsx
-<p className="cookie-delete" onClick={() => props.deleteCookie(cookie.id)}>
-  Delete
-</p>
+```javascript
+const handleDelete = () => {
+  props.deleteCookie(cookie.id);
+};
 ```
 
 5. Nothing happened. Let's console log `cookies` to see what's happening:
 
 ```javascript
-const deleteCookie = cookieId => {
-  cookies = cookies.filter(cookie => cookie.id !== +cookieId);
+const deleteCookie = (cookieId) => {
+  cookies = cookies.filter((cookie) => cookie.id !== +cookieId);
   console.log("CookieList -> cookies", cookies);
 };
 ```
@@ -129,11 +136,11 @@ import React, { useState } from "react";
 const [_cookies, setCookies] = useState(cookies);
 ```
 
-8. Let's fix our `deleteCookies` method to use our state and state method:
+8. Let's fix our `deleteCookie` method to use our state and state method:
 
 ```javascript
-const deleteCookie = cookieId => {
-  const updatedCookies = _cookies.filter(cookie => cookie.id !== +cookieId);
+const deleteCookie = (cookieId) => {
+  const updatedCookies = _cookies.filter((cookie) => cookie.id !== +cookieId);
   setCookies(updatedCookies);
 };
 ```
@@ -143,7 +150,7 @@ const deleteCookie = cookieId => {
 10. Because we're still mapping over `cookies`. Let's change it so that maps over `_cookies`.
 
 ```javascript
-const cookieList = _cookies.map(cookie => (
+const cookieList = _cookies.map((cookie) => (
   <CookieItem cookie={cookie} key={cookie.id} deleteCookie={deleteCookie} />
 ));
 ```
