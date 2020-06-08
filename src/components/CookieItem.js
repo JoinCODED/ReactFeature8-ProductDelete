@@ -6,6 +6,10 @@ import { CookieWrapper } from "../styles";
 const CookieItem = (props) => {
   const cookie = props.cookie;
 
+  const handleDelete = () => {
+    props.deleteCookie(cookie.id);
+  };
+
   return (
     <CookieWrapper>
       <img
@@ -15,10 +19,7 @@ const CookieItem = (props) => {
       />
       <p>{cookie.name}</p>
       <p className="cookie-price">{cookie.price} KD</p>
-      <p
-        className="cookie-delete"
-        onClick={() => props.deleteCookie(cookie.id)}
-      >
+      <p className="cookie-delete" onClick={handleDelete}>
         Delete
       </p>
     </CookieWrapper>
