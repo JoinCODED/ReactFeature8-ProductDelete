@@ -6,6 +6,8 @@
 
 - Passing methods as props
 
+[React 4 - Events & States](https://docs.google.com/presentation/d/1XD1QxGNfEP_BmNRlHPyP2h5WTj6gi4ql0WemniTw4vY/edit#slide=id.g4424c630a5_0_7)
+
 ## Step 0: Previous Challenge
 
 1. The word `Dark` in our button is not changing, it's weird to have it always saying `Dark Mode`. Let's give it a condition! If `theme` is equal to `light`, the return value of the conditional operator is `Dark`, else it will be `Light`.
