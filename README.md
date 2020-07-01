@@ -24,7 +24,7 @@ To delete a cookie, each one of our cookies will need a delete button.
 
 1. In `CookieItem`, add the delete button under the price. We'll create a styled component for it.
 
-2. In `styles`, create a styled component called `DeleteButtonStyled`. Instead of a button I'll use a `p` tag, our tag's color will be red.
+2. In `styles.js`, create a styled component called `DeleteButtonStyled`. Instead of a button I'll use a `p` tag, our tag's color will be red.
 
 ```javascript
 export const DeleteButtonStyled = styled.p`
@@ -78,22 +78,16 @@ const handleDelete = () => {
 
 Okay, what should happen when we click on the button? The cookie must be deleted from `cookies` in `CookieList`. You can't delete it from `props`, because `props` is read-only. So we will create a delete method in `CookieList` and pass it as a prop to `CookieItem`.
 
-1. In `CookieList`, create a function that takes the ID of the cookie we want to delete:
+1. In `CookieList`, create a function that takes the ID of the cookie we want to delete and console log it:
 
 ```javascript
 const CookieList = () => {
-    const deleteCookie = cookieId => {};
+    const deleteCookie = cookieId => {
+      console.log(`Delete cookie with the ID ${cookieId}`);
+    };
 ```
 
-2. We will use `filter` to remove the cookie with the passed ID from our `cookies` array. The `+` before `cookieId` converts it from a string to a number.
-
-```javascript
-const deleteCookie = (cookieId) => {
-  cookies = cookies.filter((cookie) => cookie.id !== +cookieId);
-};
-```
-
-3. Now we will pass this method as a prop to `CookieItem`:
+2. Now we will pass this method as a prop to `CookieItem`:
 
 ```javascript
 const cookieList = cookies.map((cookie) => (
@@ -101,7 +95,7 @@ const cookieList = cookies.map((cookie) => (
 ));
 ```
 
-4. In `CookieItem`, we will pass `props.deleteCookie` to `handleDelete`:
+3. In `CookieItem`, we will pass `props.deleteCookie` to `handleDelete`:
 
 ```javascript
 const handleDelete = () => {
@@ -109,7 +103,17 @@ const handleDelete = () => {
 };
 ```
 
-5. Nothing happened. Let's console log `cookies` to see what's happening:
+4. Let's try it out. Yes! Our message is appearing!
+
+5. Now let's actually delete a cookie. We will use `filter` to remove the cookie with the passed ID from our `cookies` array. The `+` before `cookieId` converts it from a string to a number.
+
+```javascript
+const deleteCookie = (cookieId) => {
+  cookies = cookies.filter((cookie) => cookie.id !== +cookieId);
+};
+```
+
+6. Nothing happened. Let's console log `cookies` to see what's happening:
 
 ```javascript
 const deleteCookie = (cookieId) => {
@@ -118,19 +122,19 @@ const deleteCookie = (cookieId) => {
 };
 ```
 
-6. `cookies` is changing, but we can't see the change. We agreed that if we want to see our elements change dynamically we need to use state. So let's import `useState` to create our state.
+7. `cookies` is changing, but we can't see the change. We agreed that if we want to see our elements change dynamically we need to use state. So let's import `useState` to create our state.
 
 ```javascript
 import React, { useState } from "react";
 ```
 
-7. Our state will represent the cookies on the screen so we will call it `cookies`, but we already have a variable called `cookies` which is our data. We'll call our state `_cookies` , and we'll set the initial value to `cookies` which has all our cookies.
+8. Our state will represent the cookies on the screen so we will call it `cookies`, but we already have a variable called `cookies` which is our data. We'll call our state `_cookies` , and we'll set the initial value to `cookies` which has all our cookies.
 
 ```javascript
 const [_cookies, setCookies] = useState(cookies);
 ```
 
-8. Let's fix our `deleteCookie` method to use our state and state method:
+9. Let's fix our `deleteCookie` method to use our state and state method:
 
 ```javascript
 const deleteCookie = (cookieId) => {
@@ -139,9 +143,9 @@ const deleteCookie = (cookieId) => {
 };
 ```
 
-9. Let's try deleting now. Nothing happened. Let's check the Dev tools. `_cookies` is changing when we're deleting but it's not rendering. Why is that?
+10. Let's try deleting now. Nothing happened. Let's check the Dev tools. `_cookies` is changing when we're deleting but it's not rendering. Why is that?
 
-10. Because we're still mapping over `cookies`. Let's change it so that maps over `_cookies`.
+11. Because we're still mapping over `cookies`. Let's change it so that maps over `_cookies`.
 
 ```javascript
 const cookieList = _cookies.map((cookie) => (
@@ -149,4 +153,4 @@ const cookieList = _cookies.map((cookie) => (
 ));
 ```
 
-11. And it's working!
+12. And it's working!
