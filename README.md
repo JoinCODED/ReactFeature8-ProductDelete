@@ -10,13 +10,29 @@
 
 ## Step 0: Previous Challenge
 
-1. The word `Dark` in our button is not changing, it's weird to have it always saying `Dark Mode`. Let's give it a condition! If `theme` is equal to `light`, the return value of the conditional operator is `Dark`, else it will be `Light`.
+1. Let's start with adding a `p` tag above our cookie name:
 
 ```jsx
-<ThemeButton onClick={toggleTheme}>
-  {theme === "light" ? "Dark" : "Light"} Mode
-</ThemeButton>
+<DetailWrapper>
+  <p>Back to Cookies</p>
+  <h1>{cookie.name}</h1>
 ```
+
+2. To render the list of cookies, we need to set `cookie` to `null` or any value that gives us `false`. So we will pass `setCookie` as a prop from `App` to `CookieDetail`.
+
+```jsx
+<CookieDetail cookie={cookie} setCookie={setCookie}>
+```
+
+3. Now we will call `setCookie` without passing anything to it, this will set `cookie` to `undefined` which is `false`.
+
+```jsx
+<DetailWrapper>
+  <p onClick={() => props.setCookie()}>Back to Cookies</p>
+  <h1>{cookie.name}</h1>
+```
+
+3. And that's it!
 
 ## Step 1: Delete Button
 
@@ -60,7 +76,7 @@ const theme = {
 
 5. Check the browser, our `delete` is showing! The question is, can we add an `onClick` event on a `p` tag? Yes you can. You can add an `onClick` event on any tag.
 
-6. Let's create a method that will handle the deleting in `CookieItem`, and for now let's give it an alert with the cookie's ID:
+6. Let's create a method called `handleDelete` that will handle the deleting in `CookieItem`, and for now let's give it an alert with the cookie's ID:
 
 ```javascript
 const handleDelete = () => {
@@ -91,7 +107,12 @@ const CookieList = () => {
 
 ```javascript
 const cookieList = cookies.map((cookie) => (
-  <CookieItem cookie={cookie} key={cookie.id} deleteCookie={deleteCookie} />
+  <CookieItem
+    cookie={cookie}
+    key={cookie.id}
+    setCookie={setCookie}
+    deleteCookie={deleteCookie}
+  />
 ));
 ```
 
@@ -105,36 +126,16 @@ const handleDelete = () => {
 
 4. Let's try it out. Yes! Our message is appearing!
 
-5. Now let's actually delete a cookie. We will use `filter` to remove the cookie with the passed ID from our `cookies` array. The `+` before `cookieId` converts it from a string to a number.
+5. Now let's actually delete a cookie. We will use `filter` to remove the cookie with the passed ID from our `cookies` array. Let's console log `cookies` to see what's happening
 
 ```javascript
 const deleteCookie = (cookieId) => {
-  cookies = cookies.filter((cookie) => cookie.id !== +cookieId);
+  const updatedCookies = _cookies.filter((cookie) => cookie.id !== cookieId);
+  console.log("CookieList -> updatedCookies", updatedCookies);
 };
 ```
 
-6. Nothing happened. Let's console log `cookies` to see what's happening:
-
-```javascript
-const deleteCookie = (cookieId) => {
-  cookies = cookies.filter((cookie) => cookie.id !== +cookieId);
-  console.log("CookieList -> cookies", cookies);
-};
-```
-
-7. `cookies` is changing, but we can't see the change. We agreed that if we want to see our elements change dynamically we need to use state. So let's import `useState` to create our state.
-
-```javascript
-import React, { useState } from "react";
-```
-
-8. Our state will represent the cookies on the screen so we will call it `cookies`, but we already have a variable called `cookies` which is our data. We'll call our state `_cookies` , and we'll set the initial value to `cookies` which has all our cookies.
-
-```javascript
-const [_cookies, setCookies] = useState(cookies);
-```
-
-9. Let's fix our `deleteCookie` method to use our state and state method:
+6. `cookies` is changing, but we need to set our state
 
 ```javascript
 const deleteCookie = (cookieId) => {
@@ -143,14 +144,121 @@ const deleteCookie = (cookieId) => {
 };
 ```
 
-10. Let's try deleting now. Nothing happened. Let's check the Dev tools. `_cookies` is changing when we're deleting but it's not rendering. Why is that?
+And it's working!
 
-11. Because we're still mapping over `cookies`. Let's change it so that maps over `_cookies`.
+## Step 3: Data from App
+
+At this point, `CookieList` and `CookieDetail` are each using their own copy of `cookies`! So we will move our `_cookies` state to `App.js` and pass it as a prop to both components.
+
+1. Move the `_cookies` state and `deleteCookies` method to `App.js`
 
 ```javascript
-const cookieList = _cookies.map((cookie) => (
-  <CookieItem cookie={cookie} key={cookie.id} deleteCookie={deleteCookie} />
-));
+const [_cookies, setCookies] = useState(cookies);
+
+const deleteCookie = (cookieId) => {
+  const updatedCookies = _cookies.filter((cookie) => cookie.id !== +cookieId);
+  setCookies(updatedCookies);
+};
 ```
 
-12. And it's working!
+2. In `App.js` pass `_cookies` and `deleteCookie` as a prop to `CookieList`.
+
+```jsx
+<CookieList
+  cookies={_cookies}
+  deleteCookie={deleteCookie}
+  setCookie={setCookie}
+/>
+```
+
+3. In `CookieList`, `map` over `cookies` that's coming as a prop from `App`. And instead of passing `deleteCookie` to `CookieItem`, pass `props.deleteCookie` which is coming from `App`
+
+```javascript
+const cookieList = props.cookies
+  .filter((cookie) => cookie.name.toLowerCase().includes(query.toLowerCase()))
+  .map((cookie) => (
+    <CookieItem
+      cookie={cookie}
+      deleteCookie={props.deleteCookie}
+      setCookie={props.setCookie}
+      key={cookie.id}
+    />
+  ));
+```
+
+4. Same thing with `CookieDetail`.
+
+## Step 4: Delete Button Component
+
+What if we want to add a delete button in `CookieDetail`? Do we need to create a new `handleDelete` method in `CookieDetail`? No! We will create a new component for our delete button and its method.
+
+1. Create a new folder called `buttons` in `components`. In `buttons`, create a file called `DeleteButton.js`:
+
+```javascript
+import React from "react";
+
+const DeleteButton = () => {
+  return <div></div>;
+};
+
+export default DeleteButton;
+```
+
+1. Copy the delete button from `CookieItem`. Don't forget to import `DeleteButtonStyled` styled component and fix the path
+
+```javascript
+import React from "react";
+import { DeleteButtonStyled } from "../../styles";
+
+const DeleteButton = (props) => {
+  const handleDelete = () => {
+    props.deleteCookie(cookie.id);
+  };
+
+  return <DeleteButtonStyled onClick={handleDelete}>Delete</DeleteButtonStyled>;
+};
+
+export default DeleteButton;
+```
+
+3. Import `DeleteButton` in `CookieItem`:
+
+```javascript
+import DeleteButton from "./buttons/DeleteButton";
+```
+
+4. Replace `DeleteButtonStyled` with `DeleteButton`:
+
+```jsx
+  <p>{cookie.price} KD</p>
+  <DeleteButton />
+</DetailWrapper>
+```
+
+5. As you can see, we got an error that `cookie` is undefined. So we need to pass `cookie`, but since we only need the ID let's just pass `cookie.id`:
+
+```jsx
+<DeleteButton cookieId={cookie.id} />
+```
+
+6. Let's try deleting a cookie from its detail page, we got the following error: `props.deleteCookie is not a function`.
+
+7. We need to pass `deleteCookie` as a prop:
+
+```jsx
+<DeleteButton cookieId={cookie.id} deleteCookie={props.deleteCookie} />
+```
+
+8. It's working! Now import `DeleteButton` in `CookieDetail`:
+
+```javascript
+import DeleteButton from "./buttons/DeleteButton";
+```
+
+9. Render `DeleteButton` and pass `cookie.id` and `deleteCookie`:
+
+```jsx
+<DeleteButton cookieId={cookie.id} deleteCookie={props.deleteCookie} />
+```
+
+10. Let's try it out. It's working!
